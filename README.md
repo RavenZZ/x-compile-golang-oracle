@@ -2,10 +2,10 @@
 
 this Docker image contains oracle instant client 12.1 golang 1.9.2
 
-| Software                    | Version       |
+| Software              | Version  |
 |-----------------------|----------|
-| system                    | CentOS-7 |
-| Go                    | 1.9.2    |
+| system                | CentOS-7 |
+| Go                    | 1.10    |
 | Oracle Instant Client | 12.1     |
 
 ## you can cross compile golang by following command
