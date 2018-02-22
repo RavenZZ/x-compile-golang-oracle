@@ -38,6 +38,8 @@ RUN yum localinstall -y oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm \
     oracle-instantclient12.1-jdbc-12.1.0.2.0-1.x86_64.rpm \
     oracle-instantclient12.1-odbc-12.1.0.2.0-1.x86_64.rpm
 
+RUN rm -rf /tmp
+
 COPY oci8.pc /usr/lib/oracle/oci8.pc
 ENV PKG_CONFIG_PATH=/usr/lib/oracle/
 ENV ORACLE_HOME=/usr/lib/oracle/12.1/client64
