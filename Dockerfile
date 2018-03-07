@@ -1,21 +1,24 @@
 FROM centos:7
 
-ENV VERSION 1.10
+RUN set -eux 
+RUN yum update -y
+RUN yum -y install git
+RUN yum -y clean all 
+RUN yum install -y \
+    glibc* gcc
+
+ENV VERSION 1.9.4
 ENV FILE go$VERSION.linux-amd64.tar.gz
-# ENV URL https://storage.googleapis.com/golang/$FILE
 ENV URL https://dl.google.com/go/$FILE
-ENV SHA256 b5a64335f1490277b585832d1f6c7f8c6c11206cba5cd3f771dcb87b98ad1a33
+ENV SHA256 15b0937615809f87321a457bb1265f946f9f6e736c563d6c5e0bd2c22e44f779
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 # COPY go1.10.linux-amd64.tar.gz go1.10.linux-amd64.tar.gz
 
-RUN set -eux &&\
-    yum -y install git &&\
-    yum -y clean all  &&\ 
-    curl -OL $URL
-    
+RUN curl -OL $URL
+
 RUN echo "$SHA256  $FILE" | sha256sum -c - &&\
     tar -C /usr/local -xzf $FILE &&\
     rm $FILE &&\
@@ -23,9 +26,7 @@ RUN echo "$SHA256  $FILE" | sha256sum -c - &&\
 
 WORKDIR $GOPATH
 
-RUN yum update -y 
-RUN yum install -y \
-    glibc* gcc
+
 
 COPY rpm /tmp
 
