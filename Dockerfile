@@ -2,15 +2,19 @@ FROM centos:7
 
 RUN set -eux 
 RUN yum update -y
-RUN yum -y install git
+RUN yum -y install git wget
+RUN wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 RUN yum -y clean all 
 RUN yum install -y \
     glibc* gcc
 
-ENV VERSION 1.9.4
+ARG VERSION 
+ENV VERSION ${VERSION:-1.12.9}
+ARG SHA256
+ENV SHA256 ${SHA256:-ac2a6efcc1f5ec8bdc0db0a988bb1d301d64b6d61b7e8d9e42f662fbb75a2b9b}
 ENV FILE go$VERSION.linux-amd64.tar.gz
 ENV URL https://dl.google.com/go/$FILE
-ENV SHA256 15b0937615809f87321a457bb1265f946f9f6e736c563d6c5e0bd2c22e44f779
+
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
