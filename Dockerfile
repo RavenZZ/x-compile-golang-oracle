@@ -7,6 +7,7 @@ RUN wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Cen
 RUN yum -y clean all 
 RUN yum install -y \
     glibc* gcc
+RUN yum install -y gcc-c++
 
 ARG VERSION 
 ENV VERSION ${VERSION:-1.12.9}
@@ -19,8 +20,6 @@ ENV URL https://dl.google.com/go/$FILE
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
-# COPY go1.10.linux-amd64.tar.gz go1.10.linux-amd64.tar.gz
-
 RUN curl -OL $URL
 
 RUN echo "$SHA256  $FILE" | sha256sum -c - &&\
@@ -31,9 +30,7 @@ RUN echo "$SHA256  $FILE" | sha256sum -c - &&\
 WORKDIR $GOPATH
 
 
-
 COPY rpm /tmp
-
 
 WORKDIR /tmp
 RUN yum localinstall -y oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm \
@@ -48,7 +45,8 @@ RUN rm -rf /tmp
 COPY oci8.pc /usr/lib/oracle/oci8.pc
 ENV PKG_CONFIG_PATH=/usr/lib/oracle/
 ENV ORACLE_HOME=/usr/lib/oracle/12.1/client64
-ENV LD_LIBRARY_PATH=$ORACLE_HOME/lib/
+ENV LD_LIBRARY_PATH=$ORACLE_HOME/lib/:$LD_LIBRARY_PATH
+ENV PATH=/usr/local/bin:$PATH
 RUN ldconfig
 
 # ENV http_proxy=http://10.10.203.239:1087
